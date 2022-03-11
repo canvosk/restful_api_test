@@ -16,17 +16,29 @@ class _PostPageState extends State<PostPage> {
   List<Post> posts = [];
   bool isLoading = false;
 
+  Future<void> getPost() async {
+    posts = await _service.fetchPost();
+  }
+
   @override
   void initState() {
     super.initState();
-    _service.fetchPost().then((value) {
-      setState(() {
-        isLoading = !isLoading;
-        Post newPost = value;
-        posts.add(newPost);
-        isLoading = !isLoading;
-      });
+    setState(() {
+      isLoading = !isLoading;
+      getPost();
+      isLoading = !isLoading;
     });
+    // _service.fetchPost().then((value) {
+    //   setState(() {
+    //     isLoading = !isLoading;
+    //     getPost();
+    //     log(value[0].title);
+    //     log(value[0].body);
+    //     log(value[1].title);
+    //     log(value[1].body);
+    //     isLoading = !isLoading;
+    //   });
+    // });
   }
 
   @override
@@ -62,6 +74,23 @@ class _PostPageState extends State<PostPage> {
     );
   }
 }
+
+// isLoading
+//                 ? const Center(
+//                     child: CircularProgressIndicator(),
+//                   )
+//                 : ListView.builder(
+//                     itemCount: posts.length,
+//                     itemBuilder: (context, index) {
+//                       return Card(
+//                         child: ListTile(
+//                           title: Text(posts[index].title),
+//                           subtitle: Text(posts[index].body),
+//                         ),
+//                       );
+//                     },
+//                   ),
+
 
 // child: FutureBuilder(
 //               future: fetchData(),

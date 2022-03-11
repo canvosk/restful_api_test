@@ -6,12 +6,20 @@ import '../model/post.dart';
 class PostService {
   final url = "https://jsonplaceholder.typicode.com/posts";
 
-  Future<Post> fetchPost() async {
+  Future<List<Post>> fetchPost() async {
+    List<Post> _posts = [];
     var res = await http.get(Uri.parse(url));
 
     if (res.statusCode == 200) {
-      var jsonBody = Post.fromJson(jsonDecode(res.body));
-      return jsonBody;
+      var jsonBody = jsonDecode(res.body);
+      if (jsonBody is List) {
+        jsonBody.forEach((x) {
+          _posts.add(Post.fromJson(x));
+        });
+        return _posts;
+      } else {
+        return throw Exception("Hata olustu ${res.statusCode}");
+      }
     } else {
       throw Exception("Hata olustu ${res.statusCode}");
     }
